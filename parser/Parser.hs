@@ -105,7 +105,7 @@ termList (UpperStr str:line) = do
     (termList2Line, (predVar:termList2AST))
 termList (Number num:line) = do
     let (termList2Line, termList2AST) = termList2 line
-    let predNum = PredNumber num
+    let predNum = Predicate (show num) []
     (termList2Line, (predNum:termList2AST))
 
 -- FIRST+ = {Comma, RParen}
@@ -121,7 +121,7 @@ termList2 (Comma:(UpperStr str:line)) = do
     (termList2Line, (predVar:termList2AST))
 termList2 (Comma:(Number num:line)) = do
     let (termList2Line, termList2AST) = termList2 line
-    let predNum = PredNumber num
+    let predNum = Predicate (show num) []
     (termList2Line, (predNum:termList2AST))
 -- TermList2 -> e
 termList2 (RParen:line) = ((RParen:line), [])
