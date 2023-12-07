@@ -66,8 +66,8 @@ applyAssignment assignment (Func name termlist)  =
 
 
 filterAssignments (term,x) = case term of 
-    Variable name -> (name == x)
-    _ -> False 
+    Variable name -> (name /= x)
+    _ -> True 
 
 
 
@@ -112,27 +112,57 @@ isInTermList variable (term:termList) =
     if(isInTerm variable term) then True
     else isInTermList variable termList
 
+isNothing :: Maybe a -> Bool
+isNothing Nothing = True
+isNothing (Just a) = True
 
 
 
 
--- matchTerm :: Term -> Term -> Maybe [Assignment]
+matchTerm :: Term -> Term -> Maybe [Assignment]
 
--- matchTerm (Variable str1) (Variable str2) = 
---     if(str1 == str2) then Just []
---     else Just [(Variable str1,str2)]
+matchTerm (Variable str1) (Variable str2) = 
+    if(str1 == str2) then Just []
+    else Just [(Variable str1,str2)]
 
--- matchTerm (Variable str) term = 
---     if(isInTerm str term) then Nothing
---     else Just [(term,str)]
+matchTerm (Variable str) term = 
+    if(isInTerm str term) then Nothing
+    else Just [(term,str)]
 
--- matchTerm t1 (Variable str1) = matchTerm (Variable str1) t1
+matchTerm t1 (Variable str1) = matchTerm (Variable str1) t1
 
--- matchTerm (Atom str1) (Atom str2)
---     = if(str1 == str2) then Just [] else Nothing
+matchTerm (Atom str1) (Atom str2)
+    = if(str1 == str2) then Just [] else Nothing
 
 
--- matchTerm (Func str1 termlist1) (Func str2 termlist2) =
+
+
+matchTerm (Func str1 []) (Func str2 []) = if(str1 == str2) then Just [] else Nothing
+matchTerm (Func str1 termlist1) (Func str2 termlist2) =
+    if ((str1 /= str2) || (length termlist1) /= (length termlist2)) then Nothing
+    else
+        let a = matchTerm (head termlist1) (head termlist2) in
+        case a of
+            Nothing -> Nothing
+            Just assignment -> -- matchTerm (applyAssignment assignment (Func str1 (tail termlist1))) (applyAssignment assignment (Func str2 (tail termlist2)))
+                let r1 = applyAssignment assignment (Func str1 (tail termlist1))
+                    r2 = applyAssignment assignment (Func str2 (tail termlist2))
+                in
+                    case matchTerm r1 r2 of
+                        Nothing -> Nothing
+                        Just assignment2 -> Just (composeAssignments assignment assignment2) 
+
+
+-- f(f(x,y),g(f(z,z),y))
+-- f(f(x,y),g(f(z,x),y))
+
+-- f(x,5)
+-- f(3,x)
+
+
+
+term1 = Func "f" [Func "f" [Variable "y",Variable "y"], Func "g" [Func "f" [Variable "z",Variable "z"],Variable "y"]]
+term2 = Func "f" [Func "f" [Variable "x",Variable "y"], Func "g" [Func "f" [Atom "3",Variable "x"],Atom "1"]]
 
 
 
