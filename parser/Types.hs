@@ -2,6 +2,7 @@ module Types where
 
 data Token 
     =   LexerError
+    |   LexerDebug String
     |   LParen
     |   RParen
     |   Colon
@@ -14,17 +15,16 @@ data Token
     deriving (Eq, Show)
 
 
-
-
-
 data ASTNode
-    =   Fact Pred
-    |   Rule Pred [Pred]
-    -- |   Predicate Relation
-    -- |   Relation String
-    -- |   Term String
-    -- |   Variable String
+    =   ParserError
+    |   Debug Token
+    |   Fact ASTNode
+    |   Rule ASTNode [ASTNode]
+    |   Predicate String [ASTNode]
+    |   PredVariable String
+    |   PredNumber Int
     deriving (Eq, Show)
+
 
 
 type Pred = (Relation, [Term]) 
