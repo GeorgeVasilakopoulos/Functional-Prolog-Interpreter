@@ -136,5 +136,4 @@ parser ([]:input) = parser(input)
 parser (line:input) = stmt(line):parser(input)
 
 
-main :: String -> [ASTNode]
-main(input) = parser (lexer input)
+
