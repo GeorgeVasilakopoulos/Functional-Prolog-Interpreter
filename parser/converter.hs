@@ -2,7 +2,8 @@ import Types
 import Lexer
 import Parser
 import Matcher
-import TopDown
+import Naive
+-- import TopDown
 
 
 convertItem :: ASTNode -> Term
@@ -19,8 +20,20 @@ makeClause (Rule (Predicate name list) list2) = CRule (name, map convertItem lis
 
 
 
+
+
 testme :: String -> [Clause]
 testme(input) = map makeClause (parser (lexer input))
+
+
+
+make_a_step rule (CFact base) = naiveStep [rule] [base]
+
+
+haha base rule = make_a_step (head $ testme rule) (head $ testme base)
+
+
+
 
 
 

@@ -24,6 +24,12 @@ applyAssignment assignment (Func name termlist)  =
     Func name (map (applyAssignment assignment) termlist)
 
 
+applyAssignmentPred :: [Assignment] -> Pred -> Pred
+applyAssignmentPred assignment (name,termlist) =
+    (name,map (applyAssignment assignment) termlist)
+
+
+
 filterAssignments (term,x) = case term of 
     Variable name -> (name /= x)
     _ -> True 
@@ -133,11 +139,31 @@ matchTermList (term1:l1) (term2:l2) =
     --             Just assignment2 -> Just (composeAssignments assignment assignment2)
 
 
-matchPred :: Pred -> Pred -> Bool
+matchPred :: Pred -> Pred -> Maybe [Assignment]
 matchPred (relation1, l1) (relation2, l2) = 
-    if(relation1 /= relation2 || (length l1) /= (length l2)) then False
-    else case (matchTermList l1 l2) of 
-            Nothing -> False 
-            Just assignment -> True
+    if(relation1 /= relation2 || (length l1) /= (length l2)) then Nothing
+    else  (matchTermList l1 l2)
+
+
+matchPredList :: [Pred] -> [Pred] -> Maybe [Assignment]
+matchPredList [] [] = Just []
+matchPredList l [] = Nothing
+matchPredList [] l = Nothing
+matchPredList l1 l2 = 
+    matchPred (head l1) (head l2) >>= \assignment1 ->
+    matchPredList (map (applyAssignmentPred assignment1) l1) (map (applyAssignmentPred assignment1) l2) >>= \assignment2 ->
+    Just (composeAssignments assignment1 assignment2)
+
+
+
+
+
+-- matchPredList :: [Pred] -> [Pred] -> Maybe [Assignment]
+-- matchPredList predlist1 predlist2 = 
+--     if((length predlist1) /= (length predlist2)) then Nothing
+--     else
+
+
+
 
 
