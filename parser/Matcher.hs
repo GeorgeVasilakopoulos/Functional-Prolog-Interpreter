@@ -151,7 +151,7 @@ matchPredList l [] = Nothing
 matchPredList [] l = Nothing
 matchPredList l1 l2 = 
     matchPred (head l1) (head l2) >>= \assignment1 ->
-    matchPredList (map (applyAssignmentPred assignment1) l1) (map (applyAssignmentPred assignment1) l2) >>= \assignment2 ->
+    matchPredList (map (applyAssignmentPred assignment1) $ tail l1) (map (applyAssignmentPred assignment1) $ tail l2) >>= \assignment2 ->
     Just (composeAssignments assignment1 assignment2)
 
 

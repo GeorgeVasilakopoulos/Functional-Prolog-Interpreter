@@ -20,6 +20,8 @@ makeClause (Rule (Predicate name list) list2) = CRule (name, map convertItem lis
 
 
 
+-- basic testing
+
 
 
 testme :: String -> [Clause]
