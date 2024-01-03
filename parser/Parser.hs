@@ -38,9 +38,9 @@ stmt x = ParserError
 predicate :: [Token] -> ([Token], ASTNode)
 -- Predicate -> LowerStr Pred2
 predicate (LowerStr str:line) = do
-	let (pred2Line, pred2AST) = pred2 line
-	(pred2Line, Predicate str pred2AST)
-	
+    let (pred2Line, pred2AST) = pred2 line
+    (pred2Line, Predicate str pred2AST)
+
 predicate (x:xs) = (xs, Debug x)
 
 -- FIRST+ = {LParen, RParen, Comma, $}

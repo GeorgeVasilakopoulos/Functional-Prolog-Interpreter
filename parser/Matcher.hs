@@ -1,3 +1,7 @@
+module Matcher where
+
+import Types
+
 find :: (a -> Bool) -> [a] -> Maybe a
 find f [] = Nothing
 find f (x:l) = if(f x) then Just x else find f l
@@ -96,22 +100,44 @@ matchTerm (Func str1 []) (Func str2 []) = if(str1 == str2) then Just [] else Not
 matchTerm (Func str1 termlist1) (Func str2 termlist2) =
     if ((str1 /= str2) || (length termlist1) /= (length termlist2)) then Nothing
     else
-        let a = matchTerm (head termlist1) (head termlist2) in
-        case a of
-            Nothing -> Nothing
-            Just assignment -> -- matchTerm (applyAssignment assignment (Func str1 (tail termlist1))) (applyAssignment assignment (Func str2 (tail termlist2)))
-                let r1 = applyAssignment assignment (Func str1 (tail termlist1))
-                    r2 = applyAssignment assignment (Func str2 (tail termlist2))
-                in
-                    case matchTerm r1 r2 of
-                        Nothing -> Nothing
-                        Just assignment2 -> Just (composeAssignments assignment assignment2) 
+        matchTerm (head termlist1) (head termlist2) >>= \assignment ->
+        matchTerm (applyAssignment assignment (Func str1 (tail termlist1))) (applyAssignment assignment (Func str2 (tail termlist2))) >>= \assignment2 ->
+        Just (composeAssignments assignment assignment2)
 
 
 
--- matchPred :: Pred -> [Pred] -> Maybe [Assignment]
+        -- let a = matchTerm (head termlist1) (head termlist2) in
+        -- case a of
+        --     Nothing -> Nothing
+        --     Just assignment -> -- matchTerm (applyAssignment assignment (Func str1 (tail termlist1))) (applyAssignment assignment (Func str2 (tail termlist2)))
+        --         let r1 = applyAssignment assignment (Func str1 (tail termlist1))
+        --             r2 = applyAssignment assignment (Func str2 (tail termlist2))
+        --         in
+        --             case matchTerm r1 r2 of
+        --                 Nothing -> Nothing
+        --                 Just assignment2 -> Just (composeAssignments assignment assignment2) 
+
+matchTermList :: [Term] -> [Term] -> Maybe [Assignment]
+matchTermList [] [] = Just []
+matchTermList list [] = Nothing
+matchTermList [] list = Nothing
+matchTermList (term1:l1) (term2:l2) =
+    matchTerm term1 term2 >>= \assignment ->
+    matchTermList (map (applyAssignment assignment) l1) (map (applyAssignment assignment) l2) >>= \assignment2 ->
+    Just (composeAssignments assignment assignment2)
+    -- case matchTerm term1 term2 of
+    --     Nothing -> Nothing
+    --     Just assignment -> 
+    --         case matchTermList (map (applyAssignment assignment) l1) (map (applyAssignment assignment) l2) of
+    --             Nothing -> Nothing
+    --             Just assignment2 -> Just (composeAssignments assignment assignment2)
 
 
-
+matchPred :: Pred -> Pred -> Bool
+matchPred (relation1, l1) (relation2, l2) = 
+    if(relation1 /= relation2 || (length l1) /= (length l2)) then False
+    else case (matchTermList l1 l2) of 
+            Nothing -> False 
+            Just assignment -> True
 
 
