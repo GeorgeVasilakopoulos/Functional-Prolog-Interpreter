@@ -30,7 +30,16 @@ data ASTNode
 data Clause
     =   CFact Pred
     |   CRule Pred [Pred]
-    deriving (Eq, Show)
+    deriving (Eq)
+
+instance Show Clause where
+    show (CFact pred) = show pred ++ "."
+    show (CRule pred predlist) = show pred ++ " :- " ++ (showList predlist) ++ "."
+
+showList :: [a] -> String
+showList [] = ""
+showList [x] = show x
+showList (x:xs) = (show x) ++ "," ++ (showList xs)
 
 
 
@@ -47,7 +56,13 @@ data Term
     = Variable String
     | Atom String
     | Func String [Term]
-    deriving (Eq, Show)
+    deriving (Eq)
+
+instance Show Term where
+    show (Variable name) = name
+    show (Atom name) = name
+    show (Func name termlist) = name ++ "(" ++ (showList termlist) ++ ")"
+
 
 type Assignment = (Term,String)
 
