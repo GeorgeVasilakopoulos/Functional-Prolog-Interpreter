@@ -37,13 +37,7 @@ showlist (x:xs) = (show x) ++ "," ++ (showlist xs)
 
 
 
-
-
 type Pred = (String, [Term]) 
-
-
-
-
 
 
 data Term 
@@ -58,7 +52,7 @@ instance Show Term where
     show (Func name termlist) = name ++ "(" ++ (showlist termlist) ++ ")"
 
 
--- type Assignment = (Term,String)
+
 
 type Replacement = (Term,Term)
 
@@ -66,22 +60,3 @@ type Assignment = [Replacement]
 
 
 
-
-
-
-
--- f(f(x,y),g(f(z,z),y))
--- f(f(x,y),g(f(z,x),y))
-
--- f(x,5)
--- f(3,x)
-
-
-
--- term1 = Func "f" [Func "f" [Variable "y",Variable "y"], Func "g" [Func "f" [Variable "z",Variable "z"],Variable "y"]]
--- term2 = Func "f" [Func "f" [Variable "x",Variable "y"], Func "g" [Func "f" [Atom "3",Variable "x"],Atom "1"]]
-
-
-
--- matchQuery ::  Pred -> Pred -> Bool
--- matchQuery p1 p2 =  
