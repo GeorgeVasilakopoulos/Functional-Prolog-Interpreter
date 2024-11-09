@@ -45,6 +45,8 @@ querying program = do
     line <- getLine
     if (line == "exit") then 
         return ()
+    else if (line == "") then
+        querying program
     else 
         let query = fst  (head (map convert (parser (lexer line))))
             answer = findsolution program 1 [query] [] 

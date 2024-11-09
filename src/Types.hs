@@ -47,7 +47,7 @@ data Term
     deriving (Eq)
 
 instance Show Term where
-    show (Variable name num) = name -- ++ "_" ++ (show num)
+    show (Variable name num) = name ++ if (num /= 0) then "_" ++ (show num) else ""
     show (Atom name) = name
     show (Func name termlist) = name ++ "(" ++ (showlist termlist) ++ ")"
 
