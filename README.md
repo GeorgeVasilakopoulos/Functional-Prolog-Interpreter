@@ -1,7 +1,7 @@
 # Functional Prolog Interpreter
 
 Implementation of a Prolog interpreter, written in Haskell.\
-The interpreter supports both 'Top-Down' and 'Bottom-Up' modes of opreation.\
+The interpreter supports both 'Top-Down' and 'Bottom-Up' modes of opreation.
 
 
 This project was given as an assignment for the module `ΘΠ01 Principles of Programming Languages`.\
