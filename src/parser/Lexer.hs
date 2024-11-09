@@ -20,7 +20,7 @@ isNumber :: Char -> Bool
 isNumber char = char >= '0' && char <= '9'
 
 isAlpha :: Char->Bool
-isAlpha char = isUpper char || isLower char || isNumber char
+isAlpha char = isUpper char || isLower char || isNumber char || char == '_'
 
 strToInt :: String -> Int
 strToInt str = read str
