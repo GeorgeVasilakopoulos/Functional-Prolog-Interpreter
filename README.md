@@ -5,7 +5,7 @@ The interpreter supports both 'Top-Down' and 'Bottom-Up' modes of operation.
 
 
 This project was given as an assignment for the module `ΘΠ01 Principles of Programming Languages`\
-The project's description (in Greek!) can be found under `docs/Project2023-2024.pdf`.\
+[Project Description](https://github.com/GeorgeVasilakopoulos/Functional-Prolog-Interpreter/blob/main/docs/Project2023-2024.pdf) (in Greek!)\
 This is the indicative implementation expected of students.
 
 
